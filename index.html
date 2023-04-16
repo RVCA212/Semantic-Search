@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semantic Search</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Semantic Search</h1>
+    <form id="search-form">
+        <label for="query">Enter your query:</label>
+        <textarea id="query" name="query" rows="4" cols="50"></textarea><br>
+        <label for="top_k">Number of results:</label>
+        <input id="top_k" name="top_k" type="number" min="1" value="5"><br>
+        <button type="submit">Search</button>
+    </form>
+    <h2>Results:</h2>
+    <div id="results"></div>
+
+    <script>
+        $('#search-form').on('submit', function(event) {
+            event.preventDefault();
+            var formData = $(this).serialize();
+            $.post('/', formData, function(data) {
+                var resultsHTML = '';
+                for (var i = 0; i < data.length; i++) {
+                    var result = data[i];
+                    resultsHTML += '<p><strong>Question:</strong> ' + result[0] + '<br>';
+                    resultsHTML += '<strong>Answer:</strong> ' + result[1] + '<br>';
+                    resultsHTML += '<strong>Distance:</strong> ' + result[2] + '</p>';
+                }
+                $('#results').html(resultsHTML);
+            });
+        });
+    </script>
+</body>
+</html>
